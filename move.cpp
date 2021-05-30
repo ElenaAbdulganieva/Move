@@ -1,8 +1,6 @@
 #include "TxLib.h"
 
-void DrawStar (int x, int y, double sizeX, double sizeY);
-
-void DrawStarBlack (int x, int y, double sizeX, double sizeY);
+void DrawStar (int x, int y, double sizeX, double sizeY, COLORREF frame, COLORREF fill);
 
 void Move (int* x, int* y, double sizeX, double sizeY, int* vx, int* vy, int dt,
            int leftborder, int rightborder, int upborder, int downborder);
@@ -20,29 +18,10 @@ int main ()
     return 0;
     }
 
-void DrawStar (int x, int y, double sizeX, double sizeY)
+void DrawStar (int x, int y, double sizeX, double sizeY, COLORREF frame, COLORREF fill)
     {
-    txSetColor (RGB (x + y, y, x), 5);
-    txSetFillColor (RGB (x, y, x + y));
-
-    POINT star [] = {{x              , y - 164 * sizeY},
-                     {x +  34 * sizeX, y -  52 * sizeY},
-                     {x + 150 * sizeX, y -  50 * sizeY},
-                     {x +  59 * sizeX, y +  17 * sizeY},
-                     {x +  92 * sizeX, y + 131 * sizeY},
-                     {x              , y +  65 * sizeY},
-                     {x -  92 * sizeX, y + 131 * sizeY},
-                     {x -  59 * sizeX, y +  17 * sizeY},
-                     {x - 150 * sizeX, y -  50 * sizeY},
-                     {x -  34 * sizeX, y -  52 * sizeY},
-                     {x              , y - 164 * sizeY}};
-    txPolygon (star, 11);
-    }
-
-void DrawStarBlack (int x, int y, double sizeX, double sizeY)
-    {
-    txSetColor (TX_BLACK, 5);
-    txSetFillColor (TX_BLACK);
+    txSetColor (frame, 5);
+    txSetFillColor (fill);
 
     POINT star [] = {{x              , y - 164 * sizeY},
                      {x +  34 * sizeX, y -  52 * sizeY},
@@ -110,12 +89,13 @@ void StarMoveManagement ()
 
     while (! txGetAsyncKeyState (VK_ESCAPE))
         {
-        DrawStar (x, y, sizeX, sizeY);
+        DrawStar (x, y, sizeX, sizeY, RGB (x, y, x + y), RGB (x + y, y, y));
         txSleep (20);
-        DrawStarBlack (x, y, sizeX, sizeY);
+        DrawStar (x, y, sizeX, sizeY, TX_BLACK, TX_BLACK);
 
         Move (&x, &y, sizeX, sizeY, &vx, &vy, dt,
               leftborder, rightborder, upborder, downborder);
+
         Management (&vx, &vy);
         }
     }
