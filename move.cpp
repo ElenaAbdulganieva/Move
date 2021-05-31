@@ -2,14 +2,14 @@
 
 void DrawStar (int x, int y, double sizeX, double sizeY, COLORREF frame, COLORREF fill);
 
-void Move (int* x, int* y, double sizeX, double sizeY, int* vx, int* vy, int dt,
-           int leftborder, int rightborder, int upborder, int downborder);
+void Move (int* x, int* y, double sizeX, double sizeY, int* vx, int* vy, int ax, int ay,
+           int dt, int leftborder, int rightborder, int upborder, int downborder);
 
 void Management (int* vx, int* vy);
 
 void StarMoveManagement ();
 
-int main ()
+int main (void)
     {
     txCreateWindow (800, 600);
 
@@ -37,9 +37,12 @@ void DrawStar (int x, int y, double sizeX, double sizeY, COLORREF frame, COLORRE
     txPolygon (star, 11);
     }
 
-void Move (int* x, int* y, double sizeX, double sizeY, int* vx, int* vy, int dt,
-           int leftborder, int rightborder, int upborder, int downborder)
+void Move (int* x, int* y, double sizeX, double sizeY, int* vx, int* vy, int ax, int ay,
+           int dt, int leftborder, int rightborder, int upborder, int downborder)
     {
+    *vx = *vx + ax * dt;
+    *vy = *vy + ay * dt;
+
     *x += (*vx) * dt;
     *y += (*vy) * dt;
 
@@ -83,6 +86,7 @@ void StarMoveManagement ()
     int x = 100; int y = 100;
     double sizeX = 0.3; double sizeY = 0.3;
     int vx = 5; int vy = 5;
+    int ax = 0; int ay = 1;
     int dt = 1;
     int leftborder = 10; int rightborder = 790;
     int upborder = 10; int downborder = 590;
@@ -93,7 +97,7 @@ void StarMoveManagement ()
         txSleep (20);
         DrawStar (x, y, sizeX, sizeY, TX_BLACK, TX_BLACK);
 
-        Move (&x, &y, sizeX, sizeY, &vx, &vy, dt,
+        Move (&x, &y, sizeX, sizeY, &vx, &vy, ax, ay, dt,
               leftborder, rightborder, upborder, downborder);
 
         Management (&vx, &vy);
