@@ -18,6 +18,8 @@ int main (void)
     return 0;
     }
 
+//-----------------------------------------------------------------------------
+
 void DrawStar (int x, int y, double sizeX, double sizeY, COLORREF frame, COLORREF fill)
     {
     txSetColor (frame, 5);
@@ -36,6 +38,8 @@ void DrawStar (int x, int y, double sizeX, double sizeY, COLORREF frame, COLORRE
                      {x              , y - 164 * sizeY}};
     txPolygon (star, 11);
     }
+
+//-----------------------------------------------------------------------------
 
 void Move (int* x, int* y, double sizeX, double sizeY, int* vx, int* vy, int ax, int ay,
            int dt, int leftborder, int rightborder, int upborder, int downborder)
@@ -71,6 +75,8 @@ void Move (int* x, int* y, double sizeX, double sizeY, int* vx, int* vy, int ax,
         }
     }
 
+//-----------------------------------------------------------------------------
+
 void Management (int* vx, int* vy)
     {
     if (txGetAsyncKeyState (VK_RIGHT)) (*vx) ++;
@@ -81,13 +87,17 @@ void Management (int* vx, int* vy)
     if (txGetAsyncKeyState (VK_SPACE)) *vx = *vy = 0;
     }
 
+//-----------------------------------------------------------------------------
+
 void StarMoveManagement ()
     {
     int x = 100; int y = 100;
     double sizeX = 0.3; double sizeY = 0.3;
+
     int vx = 5; int vy = 5;
     int ax = 0; int ay = 1;
     int dt = 1;
+
     int leftborder = 10; int rightborder = 790;
     int upborder = 10; int downborder = 590;
 
