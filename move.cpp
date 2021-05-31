@@ -94,8 +94,10 @@ void StarMoveManagement ()
     while (! txGetAsyncKeyState (VK_ESCAPE))
         {
         DrawStar (x, y, sizeX, sizeY, RGB (x, y, x + y), RGB (x + y, y, y));
+        txLine (x, y, x + vx, y + vy);
         txSleep (20);
         DrawStar (x, y, sizeX, sizeY, TX_BLACK, TX_BLACK);
+        txLine (x, y, x + vx, y + vy);
 
         Move (&x, &y, sizeX, sizeY, &vx, &vy, ax, ay, dt,
               leftborder, rightborder, upborder, downborder);
