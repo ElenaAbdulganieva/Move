@@ -91,12 +91,13 @@ void Management (int* vx, int* vy)
 
 void StarMoveManagement ()
     {
-    int x = 100; int y = 100;
+    int x = 100; int y = 100; int x1 = 200; int y1 = 200;
     double sizeX = 0.3; double sizeY = 0.3;
+    double sizeX1 = 0.2; double sizeY1 = 0.2;
 
-    int vx = 5; int vy = 5;
-    int ax = 0; int ay = 1;
-    int dt = 1;
+    int vx = 5; int vy = 5; int vx1 = 3; int vy1 = 5;
+    int ax = 0; int ay = 1; int ax1 = 0; int ay1 = 1;
+    int dt = 1; int dt1 = 2;
 
     int leftborder = 10; int rightborder = 790;
     int upborder = 10; int downborder = 590;
@@ -105,11 +106,17 @@ void StarMoveManagement ()
         {
         DrawStar (x, y, sizeX, sizeY, RGB (x, y, x + y), RGB (x + y, y, y));
         txLine (x, y, x + vx, y + vy);
+        DrawStar (x1, y1, sizeX1, sizeY1, RGB (x1, y1, x1 + y1), RGB (x1 + y1, y1, y1));
+        txLine (x1, y1, x1 + vx1, y1 + vy1);
         txSleep (20);
         DrawStar (x, y, sizeX, sizeY, TX_BLACK, TX_BLACK);
         txLine (x, y, x + vx, y + vy);
+        DrawStar (x1, y1, sizeX1, sizeY1, TX_BLACK, TX_BLACK);
+        txLine (x1, y1, x1 + vx1, y1 + vy1);
 
         Move (&x, &y, sizeX, sizeY, &vx, &vy, ax, ay, dt,
+              leftborder, rightborder, upborder, downborder);
+        Move (&x1, &y1, sizeX1, sizeY1, &vx1, &vy1, ax1, ay1, dt1,
               leftborder, rightborder, upborder, downborder);
 
         Management (&vx, &vy);
