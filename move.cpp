@@ -13,7 +13,11 @@ int main (void)
     {
     txCreateWindow (800, 600);
 
+    HDC fon = txLoadImage ("fon.bmp");
+
     StarMoveManagement ();
+
+    txDeleteDC (fon);
 
     return 0;
     }
@@ -22,7 +26,7 @@ int main (void)
 
 void DrawStar (int x, int y, double sizeX, double sizeY, COLORREF frame, COLORREF fill)
     {
-    txSetColor (frame, 5);
+    txSetColor (frame, 2);
     txSetFillColor (fill);
 
     POINT star [] = {{x              , y - 164 * sizeY},
@@ -73,11 +77,6 @@ void Move (int* x, int* y, double sizeX, double sizeY, int* vx, int* vy, int ax,
         *vy = - (*vy);
         *y = upborder + 165 * sizeX;
         }
-
-    if ((165 * sizeX > abs (400 - *x)) && (*y > 200) && (*y < 400))
-        {
-        *vx = - (*vx);
-        }
     }
 
 //-----------------------------------------------------------------------------
@@ -109,13 +108,15 @@ void StarMoveManagement ()
 
     while (! txGetAsyncKeyState (VK_ESCAPE))
         {
-        txSetColor (TX_WHITE, 5);
-        txLine (400, 200, 400, 400);
-        DrawStar (x, y, sizeX, sizeY, RGB (x, y, x + y), RGB (x + y, y, y));
+        txSetColor (TX_WHITE);
+        txRectangle (leftborder, upborder, rightborder, downborder);
+
+        DrawStar (x, y, sizeX, sizeY, TX_WHITE, TX_LIGHTGREEN);
         txLine (x, y, x + vx, y + vy);
-        DrawStar (x1, y1, sizeX1, sizeY1, RGB (x1, y1, x1 + y1), RGB (x1 + y1, y1, y1));
+        DrawStar (x1, y1, sizeX1, sizeY1, TX_WHITE, TX_BLUE);
         txLine (x1, y1, x1 + vx1, y1 + vy1);
         txSleep (20);
+
         DrawStar (x, y, sizeX, sizeY, TX_BLACK, TX_BLACK);
         txLine (x, y, x + vx, y + vy);
         DrawStar (x1, y1, sizeX1, sizeY1, TX_BLACK, TX_BLACK);
@@ -128,4 +129,5 @@ void StarMoveManagement ()
 
         Management (&vx, &vy);
         }
+
     }
