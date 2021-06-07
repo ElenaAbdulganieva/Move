@@ -73,6 +73,11 @@ void Move (int* x, int* y, double sizeX, double sizeY, int* vx, int* vy, int ax,
         *vy = - (*vy);
         *y = upborder + 165 * sizeX;
         }
+
+    if ((165 * sizeX > abs (400 - *x)) && (*y > 200) && (*y < 400))
+        {
+        *vx = - (*vx);
+        }
     }
 
 //-----------------------------------------------------------------------------
@@ -104,6 +109,8 @@ void StarMoveManagement ()
 
     while (! txGetAsyncKeyState (VK_ESCAPE))
         {
+        txSetColor (TX_WHITE, 5);
+        txLine (400, 200, 400, 400);
         DrawStar (x, y, sizeX, sizeY, RGB (x, y, x + y), RGB (x + y, y, y));
         txLine (x, y, x + vx, y + vy);
         DrawStar (x1, y1, sizeX1, sizeY1, RGB (x1, y1, x1 + y1), RGB (x1 + y1, y1, y1));
