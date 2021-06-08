@@ -9,15 +9,17 @@ void Management (int* vx, int* vy);
 
 void StarMoveManagement ();
 
+double Distance (int x, int y, int x1, int y1);
+
+bool ControlCollision (int x, int y, int x1, int y1, double sizeX, double sizeX1);
+
+void CollisionTrajectory ();
+
 int main (void)
     {
     txCreateWindow (800, 600);
 
-    HDC fon = txLoadImage ("fon.bmp");
-
     StarMoveManagement ();
-
-    txDeleteDC (fon);
 
     return 0;
     }
@@ -93,8 +95,37 @@ void Management (int* vx, int* vy)
 
 //-----------------------------------------------------------------------------
 
+double Distance (int x, int y, int x1, int y1)
+    {
+    double dist = sqrt((y - y1) * (y - y1) + (x - x1) * (x - x1));
+
+    return dist;
+    }
+
+//-----------------------------------------------------------------------------
+
+bool ControlCollision (int x, int y, int x1, int y1, double sizeX, double sizeX1)
+    {
+    return Distance (x, y, x1, y1) <= 165 * (sizeX + sizeX1);
+    }
+
+//-----------------------------------------------------------------------------
+
+void CollisionTrajectory (int x, int y, int x1, int y1, double sizeX, double sizeX1, int* vx, int* vx1)
+    {
+    if (ControlCollision (x, y, x1, y1, sizeX, sizeX1))
+        {
+        *vx  = - *vx;
+        *vx1 = - *vx1;
+        }
+    }
+
+//-----------------------------------------------------------------------------
+
 void StarMoveManagement ()
     {
+    HDC fon = txLoadImage ("fon.bmp");
+
     int x = 100; int y = 100; int x1 = 200; int y1 = 200;
     double sizeX = 0.3; double sizeY = 0.3;
     double sizeX1 = 0.2; double sizeY1 = 0.2;
@@ -108,8 +139,7 @@ void StarMoveManagement ()
 
     while (! txGetAsyncKeyState (VK_ESCAPE))
         {
-        txSetColor (TX_WHITE);
-        txRectangle (leftborder, upborder, rightborder, downborder);
+        txBitBlt (txDC(), 0, 0, 800, 600, fon, 0, 0);
 
         DrawStar (x, y, sizeX, sizeY, TX_WHITE, TX_LIGHTGREEN);
         txLine (x, y, x + vx, y + vy);
@@ -127,7 +157,9 @@ void StarMoveManagement ()
         Move (&x1, &y1, sizeX1, sizeY1, &vx1, &vy1, ax1, ay1, dt1,
               leftborder, rightborder, upborder, downborder);
 
+        CollisionTrajectory (x, y, x1, y1, sizeX, sizeX1, &vx, &vx1);
+
         Management (&vx, &vy);
         }
-
+    txDeleteDC (fon);
     }
