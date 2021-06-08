@@ -58,24 +58,28 @@ void Move (int* x, int* y, double sizeX, double sizeY, int* vx, int* vy, int ax,
 
     if (*x > rightborder - 165 * sizeX)
         {
+        txPlaySound ("ball.wav");
         *vx = - (*vx);
         *x = rightborder - 165 * sizeX;
         }
 
     if (*y > downborder - 165 * sizeX)
         {
+        txPlaySound ("ball.wav");
         *vy = - (*vy);
         *y = downborder - 165 * sizeX;
         }
 
     if (*x < leftborder + 165 * sizeX)
         {
+        txPlaySound ("ball.wav");
         *vx = - (*vx);
         *x = leftborder + 165 * sizeX;
         }
 
     if (*y < upborder + 165 * sizeX)
         {
+        txPlaySound ("ball.wav");
         *vy = - (*vy);
         *y = upborder + 165 * sizeX;
         }
@@ -115,6 +119,12 @@ void CollisionTrajectory (int x, int y, int x1, int y1, double sizeX, double siz
     {
     if (ControlCollision (x, y, x1, y1, sizeX, sizeX1))
         {
+        txSelectFont   ("Times", 50);
+        txSetColor     (TX_WHITE);
+        txSetFillColor (TX_WHITE);
+        txTextOut      (300, 200, "OOPS...");
+        txPlaySound ("oops.wav");
+        txSleep (50);
         *vx  = - *vx;
         *vx1 = - *vx1;
         }
@@ -125,6 +135,7 @@ void CollisionTrajectory (int x, int y, int x1, int y1, double sizeX, double siz
 void StarMoveManagement ()
     {
     HDC fon = txLoadImage ("fon.bmp");
+    HDC tablo = txLoadImage ("tablo.bmp");
 
     int x = 100; int y = 100; int x1 = 200; int y1 = 200;
     double sizeX = 0.3; double sizeY = 0.3;
@@ -162,4 +173,5 @@ void StarMoveManagement ()
         Management (&vx, &vy);
         }
     txDeleteDC (fon);
+    txDeleteDC (tablo);
     }
