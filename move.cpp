@@ -15,6 +15,10 @@ bool ControlCollision (int x, int y, int x1, int y1, double sizeX, double sizeX1
 
 void CollisionTrajectory ();
 
+int ControlScore (int score, int x, int y, int x1, int y1, double sizeX, double sizeX1);
+
+void PrintTablo (int score, int x, int y);
+
 int main (void)
     {
     txCreateWindow (800, 600);
@@ -132,14 +136,43 @@ void CollisionTrajectory (int x, int y, int x1, int y1, double sizeX, double siz
 
 //-----------------------------------------------------------------------------
 
+int ControlScore (int score, int x, int y, int x1, int y1, double sizeX, double sizeX1)
+    {
+    if (ControlCollision (x, y, x1, y1, sizeX, sizeX1))
+        {
+        score = score - 20;
+        }
+    else
+        {
+        score ++;
+        }
+
+    return score;
+    }
+
+//-----------------------------------------------------------------------------
+
+void PrintTablo (int score, int x, int y)
+    {
+    printf ("Ваш результат           %d\r",score);
+    /*txSelectFont   ("Times", 50);
+    txSetColor     (TX_WHITE);
+    txSetFillColor (TX_WHITE);
+    txTextOut (x, y, "res");*/
+    }
+
+//-----------------------------------------------------------------------------
+
 void StarMoveManagement ()
     {
+    txBegin ();
     HDC fon = txLoadImage ("fon.bmp");
     HDC tablo = txLoadImage ("tablo.bmp");
 
     int x = 100; int y = 100; int x1 = 200; int y1 = 200;
     double sizeX = 0.3; double sizeY = 0.3;
     double sizeX1 = 0.2; double sizeY1 = 0.2;
+    int score = 0;
 
     int vx = 5; int vy = 5; int vx1 = 3; int vy1 = 5;
     int ax = 0; int ay = 1; int ax1 = 0; int ay1 = 1;
@@ -150,11 +183,12 @@ void StarMoveManagement ()
 
     while (! txGetAsyncKeyState (VK_ESCAPE))
         {
-        txBitBlt (txDC(), 0, 0, 800, 600, fon, 0, 0);
+        txBitBlt (txDC (), 0, 0, 800, 600, fon,   0, 0);
+        txBitBlt (txDC (), 100, 0, 100, 50, tablo, 0, 0);
 
         DrawStar (x, y, sizeX, sizeY, TX_WHITE, TX_LIGHTGREEN);
         txLine (x, y, x + vx, y + vy);
-        DrawStar (x1, y1, sizeX1, sizeY1, TX_WHITE, TX_BLUE);
+        DrawStar (x1, y1, sizeX1, sizeY1, TX_WHITE, TX_LIGHTRED);
         txLine (x1, y1, x1 + vx1, y1 + vy1);
         txSleep (20);
 
@@ -168,10 +202,15 @@ void StarMoveManagement ()
         Move (&x1, &y1, sizeX1, sizeY1, &vx1, &vy1, ax1, ay1, dt1,
               leftborder, rightborder, upborder, downborder);
 
+        score = ControlScore (score, x, y, x1, y1, sizeX, sizeX1);
+        PrintTablo (score, 705, 0);
+
         CollisionTrajectory (x, y, x1, y1, sizeX, sizeX1, &vx, &vx1);
 
         Management (&vx, &vy);
         }
+
     txDeleteDC (fon);
     txDeleteDC (tablo);
+    txEnd ();
     }
