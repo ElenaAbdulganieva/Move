@@ -158,7 +158,7 @@ int ControlScore (int score, int x, int y, int x1, int y1, double sizeX, double 
 
 void PrintTablo (int score, int x, int y)
     {
-    printf ("Ваш результат           %d\r",score);
+    printf ("Ваш результат           %5d\r",score);
     /*txSelectFont   ("Times", 50);
     txSetColor     (TX_WHITE);
     txSetFillColor (TX_WHITE);
