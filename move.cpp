@@ -69,6 +69,7 @@ void Move (int* x, int* y, double sizeX, double sizeY, int* vx, int* vy, int ax,
         txPlaySound ("ball.wav");
         *vx = - (*vx);
         *x = rightborder - 165 * sizeX;
+        return;
         }
 
     if (*y > downborder - 165 * sizeX)
@@ -76,6 +77,7 @@ void Move (int* x, int* y, double sizeX, double sizeY, int* vx, int* vy, int ax,
         txPlaySound ("ball.wav");
         *vy = - (*vy);
         *y = downborder - 165 * sizeX;
+        return;
         }
 
     if (*x < leftborder + 165 * sizeX)
@@ -83,6 +85,7 @@ void Move (int* x, int* y, double sizeX, double sizeY, int* vx, int* vy, int ax,
         txPlaySound ("ball.wav");
         *vx = - (*vx);
         *x = leftborder + 165 * sizeX;
+        return;
         }
 
     if (*y < upborder + 165 * sizeX)
@@ -90,6 +93,7 @@ void Move (int* x, int* y, double sizeX, double sizeY, int* vx, int* vy, int ax,
         txPlaySound ("ball.wav");
         *vy = - (*vy);
         *y = upborder + 165 * sizeX;
+        return;
         }
     }
 
@@ -238,7 +242,7 @@ void Description ()
         txSelectFont   ("Times", 30);
         txTextOut (100, 160, " раткое описание игры:");
         txTextOut (100, 200, "“ебе нужно продержатьс€ как можно дольше и");
-        txTextOut (100, 240, "не собрать 1000 очков");
+        txTextOut (100, 240, "не набрать 1000 очков");
         txTextOut (100, 280, "«а каждое столкновение со звездой -20 очков");
         txTextOut (100, 320, "”правление:");
         txTextOut (100, 360, "стрелки - изменить траекторию");
