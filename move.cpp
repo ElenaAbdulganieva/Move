@@ -230,21 +230,21 @@ void Description ()
     while (! txGetAsyncKeyState (VK_SPACE))
         {
         txBitBlt (txDC (), 0, 0, 800, 600, fon, 0, 0);
-        DrawStar (600, 100, 0.2, 0.2, TX_WHITE, TX_ORANGE);
+        DrawStar (550, 120, 0.2, 0.2, TX_WHITE, TX_ORANGE);
         txSelectFont   ("Times", 50);
         txSetColor     (TX_WHITE);
         txSetFillColor (TX_WHITE);
         txTextOut (250, 100, "Поймай звезду");
         txSelectFont   ("Times", 30);
         txTextOut (100, 160, "Краткое описание игры:");
-        txTextOut (100, 200, "Твоя задача продержаться как можно дольше и");
-        txTextOut (100, 240, "не добраться до 1000 очков");
-        txTextOut (100, 280, "За каждое столкновение -20 очков");
+        txTextOut (100, 200, "Тебе нужно продержаться как можно дольше и");
+        txTextOut (100, 240, "не собрать 1000 очков");
+        txTextOut (100, 280, "За каждое столкновение со звездой -20 очков");
         txTextOut (100, 320, "Управление:");
         txTextOut (100, 360, "стрелки - изменить траекторию");
         txTextOut (100, 400, "пробел - уронить звезду");
         txTextOut (100, 440, "ESC - закончить игру");
-        txTextOut (100, 520, "Для начала игры нажми пробел...");
+        txTextOut (100, 520, "       Для начала игры нажми пробел...");
         txSleep (50);
         }
 
