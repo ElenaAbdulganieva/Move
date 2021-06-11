@@ -1,4 +1,5 @@
 #include "TxLib.h"
+#include <fstream>
 
 void DrawStar (int x, int y, double sizeX, double sizeY, COLORREF frame, COLORREF fill);
 
@@ -178,6 +179,8 @@ void StarMoveManagement ()
     HDC fon = txLoadImage ("fon.bmp");
     HDC tablo = txLoadImage ("tablo.bmp");
 
+    ofstream results ("results.txt");
+
     int x = 100; int y = 100; int x1 = 200; int y1 = 200;
     double sizeX = 0.3; double sizeY = 0.3;
     double sizeX1 = 0.2; double sizeY1 = 0.2;
@@ -218,7 +221,9 @@ void StarMoveManagement ()
 
         Management (&vx, &vy);
         }
-
+    results.open ("results.txt");
+    results << score;
+    results.close ();
     txDeleteDC (fon);
     txDeleteDC (tablo);
     txEnd ();
