@@ -1,5 +1,5 @@
 #include "TxLib.h"
-#include <fstream>
+#include "stdio.h"
 
 void DrawStar (int x, int y, double sizeX, double sizeY, COLORREF frame, COLORREF fill);
 
@@ -163,11 +163,12 @@ int ControlScore (int score, int x, int y, int x1, int y1, double sizeX, double 
 
 void PrintTablo (int score, int x, int y)
     {
-    printf ("Ваш результат           %5d\r",score);
-    /*txSelectFont   ("Times", 50);
+    char str[1];
+    sprintf (str, "%d", score);
+    txSelectFont   ("Times", 30);
     txSetColor     (TX_WHITE);
     txSetFillColor (TX_WHITE);
-    txTextOut (x, y, "res");*/
+    txTextOut (x, y, str);
     }
 
 //-----------------------------------------------------------------------------
@@ -178,8 +179,6 @@ void StarMoveManagement ()
 
     HDC fon = txLoadImage ("fon.bmp");
     HDC tablo = txLoadImage ("tablo.bmp");
-
-    ofstream results ("results.txt");
 
     int x = 100; int y = 100; int x1 = 200; int y1 = 200;
     double sizeX = 0.3; double sizeY = 0.3;
@@ -196,7 +195,8 @@ void StarMoveManagement ()
     while (! txGetAsyncKeyState (VK_ESCAPE))
         {
         txBitBlt (txDC (), 0, 0, 800, 600, fon,   0, 0);
-        txBitBlt (txDC (), 100, 0, 100, 50, tablo, 0, 0);
+        txBitBlt (txDC (), 700, 0, 100, 50, tablo, 0, 0);
+        PrintTablo (score, 730, 10);
 
         DrawStar (x, y, sizeX, sizeY, TX_WHITE, TX_LIGHTGREEN);
         txLine (x, y, x + vx, y + vy);
@@ -215,15 +215,12 @@ void StarMoveManagement ()
               leftborder, rightborder, upborder, downborder);
 
         score = ControlScore (score, x, y, x1, y1, sizeX, sizeX1);
-        PrintTablo (score, 705, 0);
 
         CollisionTrajectory (x, y, x1, y1, sizeX, sizeX1, &vx, &vx1);
 
         Management (&vx, &vy);
         }
-    results.open ("results.txt");
-    results << score;
-    results.close ();
+
     txDeleteDC (fon);
     txDeleteDC (tablo);
     txEnd ();
