@@ -180,6 +180,9 @@ void StarMoveManagement ()
     HDC fon = txLoadImage ("fon.bmp");
     HDC tablo = txLoadImage ("tablo.bmp");
 
+    FILE *res;
+    res = fopen ("results.txt", "a");
+
     int x = 100; int y = 100; int x1 = 200; int y1 = 200;
     double sizeX = 0.3; double sizeY = 0.3;
     double sizeX1 = 0.2; double sizeY1 = 0.2;
@@ -223,6 +226,8 @@ void StarMoveManagement ()
 
     txDeleteDC (fon);
     txDeleteDC (tablo);
+    fprintf(res, "%d\n", score);
+    fclose (res);
     txEnd ();
     }
 
