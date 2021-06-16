@@ -1,10 +1,25 @@
 #include "TxLib.h"
 #include "stdio.h"
 
-void DrawStar (int x, int y, double sizeX, double sizeY, COLORREF frame, COLORREF fill);
+struct Star
+    {
+    int x, y;
+    double sizeX, sizeY;
+    };
 
-void Move (int* x, int* y, double sizeX, double sizeY, int* vx, int* vy, int ax, int ay,
-           int dt, int leftborder, int rightborder, int upborder, int downborder);
+struct Border
+    {
+    int leftborder, rightborder, upborder, downborder;
+    };
+
+struct Speed
+    {
+    int vx, vy, ax, ay, dt;
+    };
+
+void DrawStar (struct Star star, COLORREF frame, COLORREF fill);
+
+void Move (struct Star* star, struct Speed* speed, struct Border border);
 
 void Management (int* vx, int* vy);
 
@@ -22,6 +37,8 @@ void PrintTablo (int score, int x, int y);
 
 void Description ();
 
+//-----------------------------------------------------------------------------
+
 int main (void)
     {
     txCreateWindow (800, 600);
@@ -35,65 +52,64 @@ int main (void)
 
 //-----------------------------------------------------------------------------
 
-void DrawStar (int x, int y, double sizeX, double sizeY, COLORREF frame, COLORREF fill)
+void DrawStar (struct Star star, COLORREF frame, COLORREF fill)
     {
     txSetColor (frame, 2);
     txSetFillColor (fill);
 
-    POINT star [] = {{x              , y - 164 * sizeY},
-                     {x +  34 * sizeX, y -  52 * sizeY},
-                     {x + 150 * sizeX, y -  50 * sizeY},
-                     {x +  59 * sizeX, y +  17 * sizeY},
-                     {x +  92 * sizeX, y + 131 * sizeY},
-                     {x              , y +  65 * sizeY},
-                     {x -  92 * sizeX, y + 131 * sizeY},
-                     {x -  59 * sizeX, y +  17 * sizeY},
-                     {x - 150 * sizeX, y -  50 * sizeY},
-                     {x -  34 * sizeX, y -  52 * sizeY},
-                     {x              , y - 164 * sizeY}};
-    txPolygon (star, 11);
+    POINT zvezda [] = {{star.x                   , star.y - 164 * star.sizeY},
+                       {star.x +  34 * star.sizeX, star.y -  52 * star.sizeY},
+                       {star.x + 150 * star.sizeX, star.y -  50 * star.sizeY},
+                       {star.x +  59 * star.sizeX, star.y +  17 * star.sizeY},
+                       {star.x +  92 * star.sizeX, star.y + 131 * star.sizeY},
+                       {star.x                   , star.y +  65 * star.sizeY},
+                       {star.x -  92 * star.sizeX, star.y + 131 * star.sizeY},
+                       {star.x -  59 * star.sizeX, star.y +  17 * star.sizeY},
+                       {star.x - 150 * star.sizeX, star.y -  50 * star.sizeY},
+                       {star.x -  34 * star.sizeX, star.y -  52 * star.sizeY},
+                       {star.x                   , star.y - 164 * star.sizeY}};
+    txPolygon (zvezda, 11);
     }
 
 //-----------------------------------------------------------------------------
 
-void Move (int* x, int* y, double sizeX, double sizeY, int* vx, int* vy, int ax, int ay,
-           int dt, int leftborder, int rightborder, int upborder, int downborder)
+void Move (struct Star* star, struct Speed* speed, struct Border border)
     {
-    *vx = *vx + ax * dt;
-    *vy = *vy + ay * dt;
+    speed -> vx = speed -> vx + speed -> ax * speed -> dt;
+    speed -> vy = speed -> vy + speed -> ay * speed -> dt;
 
-    *x += (*vx) * dt;
-    *y += (*vy) * dt;
+    star -> x += (speed -> vx) * speed -> dt;
+    star -> y += (speed -> vy) * speed -> dt;
 
-    if (*x > rightborder - 165 * sizeX)
+    if (star -> x > border.rightborder - 165 * star -> sizeX)
         {
         txPlaySound ("ball.wav");
-        *vx = - (*vx);
-        *x = rightborder - 165 * sizeX;
+        speed -> vx = - (speed -> vx);
+        star -> x = border.rightborder - 165 * star -> sizeX;
         return;
         }
 
-    if (*y > downborder - 165 * sizeX)
+    if (star -> y > border.downborder - 165 * star -> sizeX)
         {
         txPlaySound ("ball.wav");
-        *vy = - (*vy);
-        *y = downborder - 165 * sizeX;
+        speed -> vy = - (speed -> vy);
+        star -> y = border.downborder - 165 * star -> sizeX;
         return;
         }
 
-    if (*x < leftborder + 165 * sizeX)
+    if (star -> x < border.leftborder + 165 * star -> sizeX)
         {
         txPlaySound ("ball.wav");
-        *vx = - (*vx);
-        *x = leftborder + 165 * sizeX;
+        speed -> vx = - (speed -> vx);
+        star -> x = border.leftborder + 165 * star -> sizeX;
         return;
         }
 
-    if (*y < upborder + 165 * sizeX)
+    if (star -> y < border.upborder + 165 * star -> sizeX)
         {
         txPlaySound ("ball.wav");
-        *vy = - (*vy);
-        *y = upborder + 165 * sizeX;
+        speed -> vy = - (speed -> vy);
+        star -> y = border.upborder + 165 * star -> sizeX;
         return;
         }
     }
@@ -183,17 +199,15 @@ void StarMoveManagement ()
     FILE *res;
     res = fopen ("results.txt", "a");
 
-    int x = 100; int y = 100; int x1 = 200; int y1 = 200;
-    double sizeX = 0.3; double sizeY = 0.3;
-    double sizeX1 = 0.2; double sizeY1 = 0.2;
+    Star star1 = {100, 100, 0.3, 0.3};
+    Star star2 = {200, 200, 0.2, 0.2};
+
     int score = 0;
 
-    int vx = 5; int vy = 5; int vx1 = 3; int vy1 = 5;
-    int ax = 0; int ay = 1; int ax1 = 0; int ay1 = 1;
-    int dt = 1; int dt1 = 2;
+    Speed speed1 = {5, 5, 0, 1, 1};
+    Speed speed2 = {3, 5, 0, 1, 2};
 
-    int leftborder = 10; int rightborder = 790;
-    int upborder = 10; int downborder = 590;
+    Border border = {10, 790, 10, 590};
 
     while (! txGetAsyncKeyState (VK_ESCAPE))
         {
@@ -201,27 +215,27 @@ void StarMoveManagement ()
         txBitBlt (txDC (), 700, 0, 100, 50, tablo, 0, 0);
         PrintTablo (score, 730, 10);
 
-        DrawStar (x, y, sizeX, sizeY, TX_WHITE, TX_LIGHTGREEN);
-        txLine (x, y, x + vx, y + vy);
-        DrawStar (x1, y1, sizeX1, sizeY1, TX_WHITE, TX_LIGHTRED);
-        txLine (x1, y1, x1 + vx1, y1 + vy1);
+        DrawStar (star1, TX_WHITE, TX_LIGHTGREEN);
+        txLine (star1.x, star1.y, star1.x + speed1.vx, star1.y + speed1.vy);
+        DrawStar (star2, TX_WHITE, TX_LIGHTRED);
+        txLine (star2.x, star2.y, star2.x + speed2.vx, star2.y + speed2.vy);
         txSleep (20);
 
-        DrawStar (x, y, sizeX, sizeY, TX_BLACK, TX_BLACK);
-        txLine (x, y, x + vx, y + vy);
-        DrawStar (x1, y1, sizeX1, sizeY1, TX_BLACK, TX_BLACK);
-        txLine (x1, y1, x1 + vx1, y1 + vy1);
+        DrawStar (star1, TX_BLACK, TX_BLACK);
+        txLine (star1.x, star1.y, star1.x + speed1.vx, star1.y + speed1.vy);
+        DrawStar (star2, TX_BLACK, TX_BLACK);
+        txLine (star2.x, star2.y, star2.x + speed2.vx, star2.y + speed2.vy);
 
-        Move (&x, &y, sizeX, sizeY, &vx, &vy, ax, ay, dt,
-              leftborder, rightborder, upborder, downborder);
-        Move (&x1, &y1, sizeX1, sizeY1, &vx1, &vy1, ax1, ay1, dt1,
-              leftborder, rightborder, upborder, downborder);
+        Move (&star1, &speed1, border);
+        Move (&star2, &speed2, border);
 
-        score = ControlScore (score, x, y, x1, y1, sizeX, sizeX1);
+        score = ControlScore (score, star1.x, star1.y, star2.x, star2.y,
+                              star1.sizeX, star2.sizeX);
 
-        CollisionTrajectory (x, y, x1, y1, sizeX, sizeX1, &vx, &vx1);
+        CollisionTrajectory (star1.x, star1.y, star2.x, star2.y,
+                             star1.sizeX, star2.sizeX, &speed1.vx, &speed2.vx);
 
-        Management (&vx, &vy);
+        Management (&speed1.vx, &speed1.vy);
         }
 
     txDeleteDC (fon);
@@ -238,10 +252,12 @@ void Description ()
     HDC fon = txLoadImage ("fon.bmp");
     txPlaySound ("begin.wav");
 
+    Star star = {550, 120, 0.2, 0.2};
+
     while (! txGetAsyncKeyState (VK_SPACE))
         {
         txBitBlt (txDC (), 0, 0, 800, 600, fon, 0, 0);
-        DrawStar (550, 120, 0.2, 0.2, TX_WHITE, TX_ORANGE);
+        DrawStar (star, TX_WHITE, TX_ORANGE);
         txSelectFont   ("Times", 50);
         txSetColor     (TX_WHITE);
         txSetFillColor (TX_WHITE);
@@ -262,3 +278,6 @@ void Description ()
     txDeleteDC (fon);
     txPlaySound ();
     }
+
+//-----------------------------------------------------------------------------
+
