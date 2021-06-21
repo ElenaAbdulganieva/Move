@@ -167,10 +167,10 @@ int ControlScore (int score, int x, int y, int x1, int y1, double sizeX, double 
         {
         score = score - 20;
         }
-    else
-        {
-        score ++;
-        }
+        else
+            {
+            score ++;
+            }
 
     return score;
     }
